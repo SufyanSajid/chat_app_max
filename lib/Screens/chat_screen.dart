@@ -1,3 +1,5 @@
+import 'package:chat_app/widget/chats/messages.dart';
+import 'package:chat_app/widget/chats/new_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -63,35 +65,15 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats/CPB9ZjLHheNlGUScfqYO/messages')
-            .snapshots(),
-        builder: (ctx, AsyncSnapshot<QuerySnapshot> streamSnapShot) {
-          if (streamSnapShot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return ListView.builder(
-            itemCount: streamSnapShot.data!.docs.length,
-            itemBuilder: (ctx, index) => Container(
-              padding: EdgeInsets.all(8),
-              child: Text(streamSnapShot.data!.docs[index]['text']),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages(),
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //  Firebase.initializeApp();
-          FirebaseFirestore.instance
-              .collection('chats/CPB9ZjLHheNlGUScfqYO/messages')
-              .add({
-            'text': 'sufyan Here',
-          });
-        },
-        child: Icon(Icons.add),
+            NewMessage(),
+          ],
+        ),
       ),
     );
   }
